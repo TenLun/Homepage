@@ -103,9 +103,6 @@ nextTick(el)
   height:100%;
   overflow:hidden;
 }
-#block > * {
-  
-}
 
 #block > img {
   transform: translateY(-60px);

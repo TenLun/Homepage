@@ -1,0 +1,20 @@
+name: Deploy
+
+on: push
+
+jobs:
+    npm-build:
+        name: npm-build
+        runs-on: ubuntu-latest
+
+        steps: 
+        - name: read repo
+          uses: actions/checkout@v4
+        
+        - name: install dependencies and build
+          run: 
+            npm install
+            npm run build 
+        
+        - name: deploy
+          uses: JamesIves/github-pages-deploy-action@v4
