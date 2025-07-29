@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "animejs": "^4.0.2",
+    "build": "^0.1.4",
     "node": "^24.4.0",
+    "npm": "^11.5.1",
+    "run": "^1.5.0",
     "vue": "^3.5.17"
   },
   "devDependencies": {
