@@ -10,7 +10,7 @@ import { nextTick, ref, type PropType } from 'vue';
 const BlockContainer = ref()
 const Block = ref()
 
-//position [height,width,lenth,x,y,color] Direction "LEFT,FRONT"
+//position [height,width,lenth,x,y,color] Direction "Aside"
 const props = defineProps({
   Position: { type: Object as PropType<number[]>, required: true ,default:[1,1,1,1,1]},
   Color: { type:String, default:'rgb(39,39,39)'},
@@ -29,16 +29,17 @@ const calculateDimensions = (dimensions:number[]) => {
   return [ width, length, x, y, heightCos, heightSin ];
 };
 
-//todo 鼠标悬浮动画，前方文字类型，颜色
+//todo 前方文字类型
 const [width, lenth, x, y, heightCos, heightSin] = calculateDimensions(props.Position).map(Value => ref(Value))
 const [color, bgcolor] = [ref(props.Color),ref('rgb(39,39,39)')];
 
 
 function el(){
-  if (props.Direction == "Front"){
-    Block.value.style.transform = window.getComputedStyle(BlockContainer.value,":after").transform;
-    Block.value.style.position = window.getComputedStyle(BlockContainer.value,":after").position;
-    Block.value.style.top = window.getComputedStyle(BlockContainer.value,":after").top;
+  if (props.Direction == "Aside"){
+    console.log(BlockContainer.value.style.transition);
+    [Block.value.style.width,Block.value.style.height,,,] = calculateDimensions(props.Hover);
+    Block.value.style.transform += ' rotateZ(90deg)';
+    Block.value.style.display = 'inline-block';
   }
   if (props.Hover == undefined) return;
   BlockContainer.value.onmouseover = () => {
@@ -46,6 +47,7 @@ function el(){
     [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = calculateDimensions(props.Hover);
   }
   BlockContainer.value.onmouseout = () => {
+    [color.value,bgcolor.value] = [bgcolor.value,color.value];
     [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = calculateDimensions(props.Position);
   }
 }
@@ -64,9 +66,7 @@ nextTick(el)
   left:v-bind(x);
   top:v-bind(y);
   background-color: v-bind(bgcolor);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  
   overflow: visible;
 }
 #blockContainer::before{
@@ -96,14 +96,20 @@ nextTick(el)
   z-index: -1;
 }
 #block{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height:100%;
   overflow:hidden;
 }
 #block > * {
+  
+}
+
+#block > img {
   transform: translateY(-60px);
   filter:drop-shadow(0px 60px v-bind(color));
-
-}
-#block > img {
   width: 75%; 
   height: 75%; 
   object-fit: cover;
