@@ -3,8 +3,10 @@ import { animate } from 'animejs';
 import { nextTick,ref } from 'vue';
 import Animation from './components/Animation.vue'
 import Block from './components/Block.vue'
-//danwei 2.5vw
-const UNIT = 2.5
+
+const UNIT = 2.5;
+const DOCHEIGHT = 45; //文档流多少个单位长
+
 const BG = ref()
 const AppContainer = ref()
 const ScrollHolder = ref()
@@ -59,13 +61,13 @@ var drawSVGGrid = (svg: HTMLElement, width: number, height: number, gridSize: nu
 
 var entranceAnimation = () => {
   animate(AppContainer.value,{
-    delay:"10",
+    delay:"20",
     transform: 'rotateX(30deg) rotateZ(-30deg) ',
     duration: 1000,
   })
   animate(ScrollHolder.value,{
-    delay:"15",
-    height: '200vh',
+    delay:"25",
+    height: `${UNIT*DOCHEIGHT}vw`,
     duration: 1000,
   })
   entranceAnimation = null;
@@ -73,8 +75,9 @@ var entranceAnimation = () => {
 
 nextTick(() => {
   var svg = BG.value;
-  drawSVGGrid(svg, UNIT*40, UNIT*40, UNIT); // 调用函数绘制网格线
-  entranceAnimation()
+  drawSVGGrid(svg, UNIT*40, UNIT*DOCHEIGHT, UNIT); // 调用函数绘制网格线
+  entranceAnimation();
+  animateArray = null;
 });
 
 function ScrollPage(scrollY:number){
@@ -99,25 +102,44 @@ document.addEventListener('scroll', function() {
   <div id="wrapper" ref="AppContainer">
     <svg id="background" ref="BG"></svg>
     <div class="animationContainer"><Animation v-for="item in animateArray" :animateVar="item" :unit="UNIT"/></div>
-    <Block :Position="[0.1,1,5,5,16]" :unit="UNIT" :Color="'white'"><div>TECH STACK & TOOLS</div></Block>
-    <Block :Position="[1,1,1,9,19]" :Hover="[2,1,1,9,19]" :Color="'red'" :unit="UNIT" ><img src="./assets/icons/npm.svg" alt="npm"></Block>
-    <Block :Position="[1,1,1,8,19]" :Hover="[2,1,1,8,19]" :Color="'green'" :unit="UNIT" ><img src="./assets/icons/vue.svg" alt="vue"></Block>
-    <Block :Position="[1,1,1,7,19]" :Hover="[2,1,1,7,19]" :Color="'deepskyblue'" :unit="UNIT" ><img src="./assets/icons/python.svg" alt="python"></Block>
-    <Block :Position="[1,1,1,6,19]" :Hover="[2,1,1,6,19]" :Color="'gold'" :unit="UNIT" ><img src="./assets/icons/js.svg" alt="js"></Block>
-    <Block :Position="[1,1,1,5,19]" :Hover="[2,1,1,5,19]" :Color="'orange'" :unit="UNIT" ><img src="./assets/icons/html.svg" alt="html5"></Block>
+    <Block :Position="[0.1,1,5,5,21]" :unit="UNIT" :Color="'white'"><div>TECH STACK</div></Block>
+    <Block :Position="[1,1,1,9,24]" :Hover="[2,1,1,9,24]" :Color="'red'" :unit="UNIT" ><img src="./assets/icons/npm.svg" alt="npm"></Block>
+    <Block :Position="[1,1,1,8,24]" :Hover="[2,1,1,8,24]" :Color="'green'" :unit="UNIT" ><img src="./assets/icons/vue.svg" alt="vue"></Block>
+    <Block :Position="[1,1,1,7,24]" :Hover="[2,1,1,7,24]" :Color="'deepskyblue'" :unit="UNIT" ><img src="./assets/icons/python.svg" alt="python"></Block>
+    <Block :Position="[1,1,1,6,24]" :Hover="[2,1,1,6,24]" :Color="'gold'" :unit="UNIT" ><img src="./assets/icons/js.svg" alt="js"></Block>
+    <Block :Position="[1,1,1,5,24]" :Hover="[2,1,1,5,24]" :Color="'orange'" :unit="UNIT" ><img src="./assets/icons/html.svg" alt="html5"></Block>
 
-    <Block :Position="[0.1,1,5,5,21]" :unit="UNIT" :Color="'white'"><div>MY PROJECTS</div></Block>
-    <Block :Position="[0.1,6,12,5,23]" :unit="UNIT" :Color="'white'"><div style="width:100%;height:100%">
+    <Block :Position="[0.1,1,5,5,26]" :unit="UNIT" :Color="'white'"><div>MY PROJECTS</div></Block>
+    <Block :Position="[0.1,6,12,5,28]" :unit="UNIT" :Color="'white'"><div style="width:100%;height:100%">
       <a href="https://github.com/Tenlun/SVG-Generator" target="_blank">
-        <img style="object-fit: fill;width:100%;height:100%" loading="lazy" src="https://opengraph.githubassets.com/githubcard/Tenlun/SVG-Generator"></img></a></div></Block>
-    <Block :Position="[0.1,6,12,18,23]" :unit="UNIT" :Color="'white'"><div style="width:100%;height:100%">
+        <img style="width:100%;height:100%" loading="lazy" src="https://opengraph.githubassets.com/githubcard/Tenlun/SVG-Generator"></img></a></div>
+    </Block>
+    <Block :Position="[0.1,6,12,18,28]" :unit="UNIT" :Color="'white'"><div style="width:100%;height:100%">
       <a href="https://github.com/Tenlun/Console" target="_blank">
-        <img style="object-fit: fill;width:100%;height:100%" loading="lazy" src="https://opengraph.githubassets.com/githubcard/Tenlun/Console"></img></a></div></Block>
-    <Block :Position="[0.1,6,12,5,30]" :unit="UNIT" :Color="'white'"><div style="width:100%;height:100%">
+        <img style="width:100%;height:100%" loading="lazy" src="https://opengraph.githubassets.com/githubcard/Tenlun/Console"></img></a></div>
+    </Block>
+    <Block :Position="[0.1,6,12,5,35]" :unit="UNIT" :Color="'white'"><div style="width:100%;height:100%">
       <a href="https://github.com/Tenlun/Homepage" target="_blank">
-        <img style="object-fit: fill;width:100%;height:100%" loading="lazy" src="https://opengraph.githubassets.com/githubcard/Tenlun/Homepage"></img></a></div></Block>
+        <img style="width:100%;height:100%" loading="lazy" src="https://opengraph.githubassets.com/githubcard/Tenlun/Homepage"></img></a></div>
+    </Block>
 
-    <Block :Position="[0.1,1,1,19,16]" :Hover="[0.1,6,1,19,16]" :unit="UNIT" :Color="'white'" :Direction="'Aside'"><img src="./assets/icons/npm.svg" alt="npm"><div>Github</div></Block>
+    <Block :Position="[0.1,1,1,21,21]" :Hover="[0.1,6,1,21,21]" :unit="UNIT" :Color="'rgb(39,39,39)'" :Direction="'Aside'">
+      <a style="width:2.5vw;height:2.5vw;left:0px;top:0px">
+        <img style="object-fit: cover; height: 75%;" loading="lazy" src="./assets/icons/discord.svg" alt="discord"></img></a>
+      <div style="position: relative; left: 6.25%; white-space: nowrap">Discord (tenlun/otenluno)</div>
+    </Block>
+    <Block :Position="[0.1,1,1,20,21]" :Hover="[0.1,6,1,20,21]" :unit="UNIT" :Color="'rgb(39,39,39)'" :Direction="'Aside'">
+      <a style="width:2.5vw;height:2.5vw;left:0px;top:0px">
+        <img style=" object-fit: cover; height: 75%;" loading="lazy" src="./assets/icons/twitter.svg" alt="twitter"></img></a>
+      <div style="position: relative; left: 6.25%; white-space: nowrap">Twitter (Tenlun/@oTenluno)</div>
+    </Block>
+    <Block :Position="[0.1,1,1,19,21]" :Hover="[0.1,6,1,19,21]" :unit="UNIT" :Color="'rgb(39,39,39)'" :Direction="'Aside'">
+      <a style="width:2.5vw;height:2.5vw;left:0px;top:0px">
+        <img style="object-fit: cover; height: 75%;" loading="lazy" src="./assets/icons/github.svg" alt="github"></img></a>
+      <div style="position: relative; left: 6.25%; white-space: nowrap">Github (Tenlun/TenLun)</div>
+    </Block>
+    
+    
   </div>
 
   <!--滚动条占位--->
@@ -138,8 +160,8 @@ document.addEventListener('scroll', function() {
   position:fixed;
   top:0;
   left:0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 
 #scrollholder{

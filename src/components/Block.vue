@@ -36,19 +36,20 @@ const [color, bgcolor] = [ref(props.Color),ref('rgb(39,39,39)')];
 
 function el(){
   if (props.Direction == "Aside"){
-    console.log(BlockContainer.value.style.transition);
-    [Block.value.style.width,Block.value.style.height,,,] = calculateDimensions(props.Hover);
-    Block.value.style.transform += ' rotateZ(90deg)';
-    Block.value.style.display = 'inline-block';
+    [Block.value.style.width,Block.value.style.height] = [width.value,lenth.value];
+    Block.value.style.transform = `translate(${UNIT}vw) rotateZ(90deg)`;
+    Block.value.style.transformOrigin = `top left`;
   }
   if (props.Hover == undefined) return;
   BlockContainer.value.onmouseover = () => {
     [color.value,bgcolor.value] = [bgcolor.value,color.value];
     [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = calculateDimensions(props.Hover);
+    if (props.Direction == "Aside") [Block.value.style.width,Block.value.style.height] = [width.value,lenth.value];
   }
   BlockContainer.value.onmouseout = () => {
     [color.value,bgcolor.value] = [bgcolor.value,color.value];
     [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = calculateDimensions(props.Position);
+    if (props.Direction == "Aside") [Block.value.style.width,Block.value.style.height] = [width.value,lenth.value];
   }
 }
 
@@ -66,7 +67,6 @@ nextTick(el)
   left:v-bind(x);
   top:v-bind(y);
   background-color: v-bind(bgcolor);
-  
   overflow: visible;
 }
 #blockContainer::before{
@@ -96,6 +96,7 @@ nextTick(el)
   z-index: -1;
 }
 #block{
+  transition: all .4s;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -107,9 +108,17 @@ nextTick(el)
 #block > img {
   transform: translateY(-60px);
   filter:drop-shadow(0px 60px v-bind(color));
-  width: 75%; 
   height: 75%; 
   object-fit: cover;
   vertical-align: middle;
+}
+
+#block > a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: v-bind(color);
+  z-index: 1
 }
 </style>

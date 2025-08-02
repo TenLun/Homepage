@@ -25,7 +25,7 @@ var startAnime = ()=>{
     element.appendChild(obj);
 
     animate(obj,{
-        delay:'3',
+        delay:'10',
         left: UNIT * props.animateVar[4] + "vw",
         top: UNIT * props.animateVar[5] + "vw",
         duration: 1000,
