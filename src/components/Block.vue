@@ -10,35 +10,38 @@ import { nextTick, ref, type PropType } from 'vue';
 const BlockContainer = ref()
 const Block = ref()
 
-//position [height,width,lenth,x,y,color] Direction "Aside"
 const props = defineProps({
-  Position: { type: Object as PropType<number[]>, required: true ,default:[1,1,1,1,1]},
+  Position: { type: Object as PropType<number[]>, required: true ,default:[1,1,1,1,1]}, //[height,width,lenth,x,y,color]
   Color: { type:String, default:'rgb(39,39,39)'},
   unit: { type: Number, required: true },
   Hover: Object as PropType<number[]>,
-  Direction: String 
+  MobilePos: Object as PropType<number[]>,
+  Direction: String,
+  IfMobile: Boolean,
 })
 
 const UNIT = props.unit;
 const angle = -60; //rotateZ
 const angleX = 30; //rotateX
 const calculateDimensions = (dimensions:number[]) => {
-  var [, width, length, x, y] = dimensions.map(value => `${value * UNIT}vw`);
-  var heightCos = `${dimensions[0] * Math.cos(angleX * (Math.PI/180)) * Math.cos(angle * (Math.PI/180)) * UNIT}vw`;
-  var heightSin = `${dimensions[0] * Math.cos(angleX * (Math.PI/180)) * Math.sin(angle * (Math.PI/180)) * UNIT}vw`;
+  var [, width, length, x, y] = dimensions.map(value => `${value * UNIT}px`);
+  var heightCos = `${dimensions[0] * Math.cos(angleX * (Math.PI/180)) * Math.cos(angle * (Math.PI/180)) * UNIT}px`;
+  var heightSin = `${dimensions[0] * Math.cos(angleX * (Math.PI/180)) * Math.sin(angle * (Math.PI/180)) * UNIT}px`;
   return [ width, length, x, y, heightCos, heightSin ];
 };
 
-//todo 前方文字类型
-const [width, lenth, x, y, heightCos, heightSin] = calculateDimensions(props.Position).map(Value => ref(Value))
+const [width, lenth, x, y, heightCos, heightSin] = calculateDimensions(props.Position).map(Value => ref(Value));
 const [color, bgcolor] = [ref(props.Color),ref('rgb(39,39,39)')];
+const ifMobile = ref(props.IfMobile);
 
-
-function el(){
+function init(){
   if (props.Direction == "Aside"){
     [Block.value.style.width,Block.value.style.height] = [width.value,lenth.value];
-    Block.value.style.transform = `translate(${UNIT}vw) rotateZ(90deg)`;
+    Block.value.style.transform = `translate(${UNIT}px) rotateZ(90deg)`;
     Block.value.style.transformOrigin = `top left`;
+  }
+  if (ifMobile.value && props.MobilePos != undefined ){
+    [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = calculateDimensions(props.MobilePos);
   }
   if (props.Hover == undefined) return;
   BlockContainer.value.onmouseover = () => {
@@ -53,7 +56,7 @@ function el(){
   }
 }
 
-nextTick(el)
+nextTick(init)
 
 </script>
 
