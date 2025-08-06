@@ -15,7 +15,7 @@ const props = defineProps({
 
 <template>
     <a :href="`${props.Href}`">
-    <Block :IfMobile="props.IfMobile" :MobileHov="props.MobileHov" :Hover="props.Hover" :MobilePos="props.MobilePos" :Position="props.Position" :unit="props.unit" :Color="'rgb(39,39,39)'" :Direction="'Aside'">
+    <Block :IfMobile="props.IfMobile" :MobileHov="props.MobileHov" :MobilePos="props.MobilePos" :Position="props.Position" :Hover="props.Hover" :unit="props.unit" :Color="'rgb(39,39,39)'" :Direction="'Aside'">
         <div id="image-container" :style="`width:${props.Position[2]*props.unit}px; height:${props.Position[1]*props.unit}px;  left:0px;top:0px`">
             <img style="object-fit: cover; height: 75%;" loading="lazy" :src="`${props.Src}`" :alt="`${props.Src}`" />
         </div>

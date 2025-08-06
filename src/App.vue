@@ -12,7 +12,7 @@ const DOCHEIGHT = 50; //文档流多少个单位长
 
 const AppContainer = ref()
 
-const IFMOBILE = window.innerWidth < 12200
+const IFMOBILE = window.innerWidth < 800
 
 var animateArray = IFMOBILE ? [
   [3,1,-5,8,5,8],
@@ -47,7 +47,7 @@ var animateArray = IFMOBILE ? [
 var entranceAnimation = () => {
   animate(AppContainer.value,{
     delay:"20",
-    transform: 'rotateX(30deg) rotateZ(-30deg) translateX(-20px) translateY(-135px)',
+    transform: 'rotateX(30deg) rotateZ(-30deg) translateY(-135px) ' + (IFMOBILE ? 'translateX(-200px)' : 'translateX(-20px)'),
     duration: 1000,
   })
   entranceAnimation = null;
@@ -60,7 +60,7 @@ nextTick(() => {
 
 function ScrollPage(scrollY:number){
   var content = AppContainer.value;
-  content.style.transform = `rotateX(30deg) rotateZ(-30deg) translateY(-${scrollY+135}px) translateX(-20px)` ;
+  content.style.transform = `rotateX(30deg) rotateZ(-30deg) translateY(-${scrollY+135}px)` + (IFMOBILE ? ' translateX(-200px)' : ' translateX(-20px)') ;
 }
 var ticking = false;
 document.addEventListener('scroll', function() {
@@ -93,11 +93,11 @@ document.addEventListener('scroll', function() {
     <Block :Position="[0.1,1,5,5,26]" :unit="UNIT" :Color="'white'"><div>MY PROJECTS</div></Block>
     <Project :Position="[0.1,6,12,5,28]" :unit="UNIT" :Href="'Tenlun/SVG-Generator'" />
     <Project :Position="[0.1,6,12,5,35]" :unit="UNIT" :Href="'Tenlun/Homepage'" />
-    <Project :Position="[0.1,6,12,18,28]" :unit="UNIT" :Href="'Tenlun/Console'" :IfMobile="IFMOBILE" :MobilePos="[0.1,6,12,5,42]" />
+    <Project :Position="[0.1,6,12,18,28]" :MobilePos="[0.1,6,12,5,42]" :unit="UNIT" :Href="'Tenlun/Console'" :IfMobile="IFMOBILE"  />
 
-    <Contact :Position="[0.1,1,1,21,21]" :Hover="[0.1,6,1,21,21]" :Src="'discord.svg'" :unit="UNIT">Discord (tenlun/otenluno)</Contact>
-    <Contact :Position="[0.1,1,1,20,21]" :Hover="[0.1,6,1,20,21]" :Src="'twitter.svg'" :unit="UNIT">Twitter (Tenlun/@oTenluno)</Contact>
-    <Contact :Position="[0.1,1,1,19,21]" :Hover="[0.1,6,1,19,21]" :Href="'https://github.com/Tenlun'" :Src="'github.svg'"  :unit="UNIT">Github (Tenlun/TenLun)</Contact>
+    <Contact :Position="[0.1,1,1,21,21]" :Hover="[0.1,6,1,21,21]" :IfMobile="IFMOBILE" :MobilePos="[0.1,6,1,14,21]" :MobileHov="[0.1,6,1,14,21]" :Src="'discord.svg'" :unit="UNIT">Discord (tenlun/otenluno)</Contact>
+    <Contact :Position="[0.1,1,1,20,21]" :Hover="[0.1,6,1,20,21]" :IfMobile="IFMOBILE" :MobilePos="[0.1,6,1,13,21]" :MobileHov="[0.1,6,1,13,21]" :Src="'twitter.svg'" :unit="UNIT">Twitter (Tenlun/@oTenluno)</Contact>
+    <Contact :Position="[0.1,1,1,19,21]" :Hover="[0.1,6,1,19,21]" :IfMobile="IFMOBILE" :MobilePos="[0.1,6,1,12,21]" :MobileHov="[0.1,6,1,12,21]" :Href="'https://github.com/Tenlun'" :Src="'github.svg'" :unit="UNIT">Github (Tenlun/TenLun)</Contact>
   </div>
   </div>
   <!--滚动条占位--->
