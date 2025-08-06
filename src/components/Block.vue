@@ -11,13 +11,14 @@ const BlockContainer = ref()
 const Block = ref()
 
 const props = defineProps({
-  Position: { type: Object as PropType<number[]>, required: true ,default:[1,1,1,1,1]}, //[height,width,lenth,x,y,color]
-  Color: { type:String, default:'rgb(39,39,39)'},
   unit: { type: Number, required: true },
+  Position: { type: Object as PropType<number[]>,default:[1,1,1,1,1]}, //[height,width,lenth,x,y,color]
   Hover: Object as PropType<number[]>,
   MobilePos: Object as PropType<number[]>,
+  MobileHov: Object as PropType<number[]>,
   Direction: String,
-  IfMobile: Boolean,
+  Color: { type:String, default:'rgb(39,39,39)'},
+  IfMobile: { type:Boolean, default:false },
 })
 
 const UNIT = props.unit;
@@ -30,28 +31,25 @@ const calculateDimensions = (dimensions:number[]) => {
   return [ width, length, x, y, heightCos, heightSin ];
 };
 
-const [width, lenth, x, y, heightCos, heightSin] = calculateDimensions(props.Position).map(Value => ref(Value));
+const [width, lenth, x, y, heightCos, heightSin] = calculateDimensions(props.IfMobile? props.MobilePos : props.Position).map(Value => ref(Value));
 const [color, bgcolor] = [ref(props.Color),ref('rgb(39,39,39)')];
-const ifMobile = ref(props.IfMobile);
 
 function init(){
+  
   if (props.Direction == "Aside"){
     [Block.value.style.width,Block.value.style.height] = [width.value,lenth.value];
     Block.value.style.transform = `translate(${UNIT}px) rotateZ(90deg)`;
     Block.value.style.transformOrigin = `top left`;
   }
-  if (ifMobile.value && props.MobilePos != undefined ){
-    [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = calculateDimensions(props.MobilePos);
-  }
   if (props.Hover == undefined) return;
   BlockContainer.value.onmouseover = () => {
     [color.value,bgcolor.value] = [bgcolor.value,color.value];
-    [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = calculateDimensions(props.Hover);
+    [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = props.IfMobile ? calculateDimensions(props.MobileHov) : calculateDimensions(props.Hover);
     if (props.Direction == "Aside") [Block.value.style.width,Block.value.style.height] = [width.value,lenth.value];
   }
   BlockContainer.value.onmouseout = () => {
     [color.value,bgcolor.value] = [bgcolor.value,color.value];
-    [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = calculateDimensions(props.Position);
+    [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = props.IfMobile ? calculateDimensions(props.MobilePos) : calculateDimensions(props.Position);
     if (props.Direction == "Aside") [Block.value.style.width,Block.value.style.height] = [width.value,lenth.value];
   }
 }
@@ -116,12 +114,4 @@ nextTick(init)
   vertical-align: middle;
 }
 
-#block > a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  background-color: v-bind(color);
-  z-index: 1
-}
 </style>

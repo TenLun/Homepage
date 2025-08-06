@@ -6,9 +6,9 @@
 import { animate } from 'animejs';
 import { ref, nextTick, type PropType } from 'vue';
 
-//animateVar [height,width,orgin_x,origin_y,final_x,final_y]
+
 const props = defineProps({
-  animateVar : { type: Object as PropType<number[]>, required: true },
+  animateVar : { type: Object as PropType<number[]>, required: true }, //animateVar [height,width,orgin_x,origin_y,final_x,final_y]
   unit: { type: Number, required: true }
 })
 
