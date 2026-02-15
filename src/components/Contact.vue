@@ -3,11 +3,7 @@ import type { PropType } from 'vue';
 import Block from './Block.vue';
 const props = defineProps({
   unit: { type: Number, required: true },
-  Position: { type: Object as PropType<number[]>,default:[1,1,1,1,1]}, //[height,width,lenth,x,y,color]
-  Hover: { type: Object as PropType<number[]>,default:[1,1,1,1,1]}, //[height,width,lenth,x,y,color]
-  MobilePos: Object as PropType<number[]>,
-  MobileHov: Object as PropType<number[]>,
-  IfMobile: { type:Boolean, default:false },
+  Position: { type: Object as PropType<[number,number] | undefined>, default:undefined},    //[x,y]
   Href:String,
   Src:String
 })
@@ -15,17 +11,22 @@ const props = defineProps({
 
 <template>
     <a :href="`${props.Href}`">
-    <Block :IfMobile="props.IfMobile" :MobileHov="props.MobileHov" :MobilePos="props.MobilePos" :Position="props.Position" :Hover="props.Hover" :unit="props.unit" :Color="'rgb(39,39,39)'" :Direction="'Aside'">
-        <div id="image-container" :style="`width:${props.Position[2]*props.unit}px; height:${props.Position[1]*props.unit}px;  left:0px;top:0px`">
+    <Block :Position="props.Position" :HWL="[0.1,1,1]" :HoverHWL="[0.1,6,1]" :unit="props.unit" :Color="'rgb(39,39,39)'">
+      <div id="block-container">
+        <div id="image-container" :style="`width:${props.unit}px; height:${props.unit}px;`">
             <img style="object-fit: cover; height: 75%;" loading="lazy" :src="`${props.Src}`" :alt="`${props.Src}`" />
         </div>
-        <div style="position: relative; left: 6.25%; white-space: nowrap"><slot></slot></div>
+        <div id="text"><slot></slot></div>
+      </div>
     </Block>
     </a>
 </template>
 
 <style scoped>
+
 #image-container {
+  transform: rotate(90deg);
+  left:0px;top:0px;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -33,4 +34,23 @@ const props = defineProps({
   background-color: rgb(39,39,39);
   z-index: 1
 }
+
+#block-container{
+  height: 100%;
+  width: 100%;
+  transition: all .4s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow:hidden;
+}
+
+#text{
+  top:6.25%;
+  position: relative; white-space: nowrap;
+  color: white !important;
+  transform-origin: center;
+  transform: rotate(90deg);
+}
+
 </style>

@@ -1,74 +1,85 @@
-<template>
-  <div id="blockContainer" ref="BlockContainer">
-    <div id="block" ref="Block"><slot></slot></div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { nextTick, ref, type PropType } from 'vue';
 
 const BlockContainer = ref()
-const Block = ref()
 
 const props = defineProps({
   unit: { type: Number, required: true },
-  Position: { type: Object as PropType<number[]>,default:[1,1,1,1,1]}, //[height,width,lenth,x,y,color]
-  Hover: Object as PropType<number[]>,
-  MobilePos: Object as PropType<number[]>,
-  MobileHov: Object as PropType<number[]>,
-  Direction: String,
+  Position: { type: Object as PropType<[number,number] | undefined>, default:undefined},    //[x,y]
+  HWL: { type: Object as PropType<[number,number,number]>, default:[1,1,1]},  //[height,width,lenth]
+  HoverHWL: { type: Object as PropType<[number,number,number]>}, //[height,width,lenth]
   Color: { type:String, default:'rgb(39,39,39)'},
-  IfMobile: { type:Boolean, default:false },
 })
 
 const UNIT = props.unit;
-const angle = -60; //rotateZ
-const angleX = 30; //rotateX
-const calculateDimensions = (dimensions:number[]) => {
-  var [, width, length, x, y] = dimensions.map(value => `${value * UNIT}px`);
-  var heightCos = `${dimensions[0] * Math.cos(angleX * (Math.PI/180)) * Math.cos(angle * (Math.PI/180)) * UNIT}px`;
-  var heightSin = `${dimensions[0] * Math.cos(angleX * (Math.PI/180)) * Math.sin(angle * (Math.PI/180)) * UNIT}px`;
-  return [ width, length, x, y, heightCos, heightSin ];
-};
 
-const [width, lenth, x, y, heightCos, heightSin] = calculateDimensions(props.IfMobile? props.MobilePos : props.Position).map(Value => ref(Value));
+const HWL = props.HWL
+const HoverHWL = props.HoverHWL || props.HWL
+
 const [color, bgcolor] = [ref(props.Color),ref('rgb(39,39,39)')];
 
-function init(){
-  
-  if (props.Direction == "Aside"){
-    [Block.value.style.width,Block.value.style.height] = [width.value,lenth.value];
-    Block.value.style.transform = `translate(${UNIT}px) rotateZ(90deg)`;
-    Block.value.style.transformOrigin = `top left`;
-  }
-  if (props.Hover == undefined) return;
+const angle = -60; //rotateZ
+const angleX = 30; //rotateX
+
+const calculateDimensions = (dimensions:number[]) => {
+  var [, width, length] = dimensions.map(value => `${value * UNIT}px`);
+  var heightCos = `${dimensions[0] * Math.cos(angleX * (Math.PI/180)) * Math.cos(angle * (Math.PI/180)) * UNIT}px`;
+  var heightSin = `${dimensions[0] * Math.cos(angleX * (Math.PI/180)) * Math.sin(angle * (Math.PI/180)) * UNIT}px`;
+  return [ width, length, heightCos, heightSin ];
+};
+
+const [width, lenth, heightCos, heightSin] = calculateDimensions(props.HWL).map(Value => ref(Value));
+
+const changeHWL = () => {
   BlockContainer.value.onmouseover = () => {
     [color.value,bgcolor.value] = [bgcolor.value,color.value];
-    [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = props.IfMobile ? calculateDimensions(props.MobileHov) : calculateDimensions(props.Hover);
-    if (props.Direction == "Aside") [Block.value.style.width,Block.value.style.height] = [width.value,lenth.value];
+    [width.value, lenth.value, heightCos.value, heightSin.value] = calculateDimensions(HoverHWL);
   }
   BlockContainer.value.onmouseout = () => {
     [color.value,bgcolor.value] = [bgcolor.value,color.value];
-    [width.value, lenth.value, x.value, y.value, heightCos.value, heightSin.value] = props.IfMobile ? calculateDimensions(props.MobilePos) : calculateDimensions(props.Position);
-    if (props.Direction == "Aside") [Block.value.style.width,Block.value.style.height] = [width.value,lenth.value];
+    [width.value, lenth.value, heightCos.value, heightSin.value] = calculateDimensions(HWL);
   }
 }
 
-nextTick(init)
+const changePosition = () => {
+  if (props.Position == undefined) {
+    BlockContainer.value.style.position = 'relative';
+  } else {
+    const [x,y] = props.Position.map(value => `${value * UNIT}px`)
+    BlockContainer.value.style.position = 'absolute';
+    BlockContainer.value.style.left= x;
+    BlockContainer.value.style.top= y;
+  }
+}
+
+if (HoverHWL != HWL ) {
+  nextTick(changeHWL)
+}
+
+nextTick(changePosition)
 
 </script>
 
-<style>
+<template>
+  <div id="blockContainer" ref="BlockContainer">
+    <slot></slot>
+  </div>
+</template>
+
+<style scoped>
 #blockContainer{
+  flex-shrink: 0;
+
   transition: all .4s;
+  overflow: visible;
+
+  background-color: v-bind(bgcolor);
+
   transform: translate(v-bind(heightCos) , v-bind(heightSin));
-  position: absolute;
+
   height:v-bind(width);
   width:v-bind(lenth);
-  left:v-bind(x);
-  top:v-bind(y);
-  background-color: v-bind(bgcolor);
-  overflow: visible;
+
 }
 #blockContainer::before{
   content:'';
@@ -88,30 +99,15 @@ nextTick(init)
   transform-origin: top;
   transform: skewX( calc( 90deg - v-bind(angle) * 1deg ) );
   transition: all .4s;
+
   left:0px;
   top: v-bind(width);
+
   width: v-bind(lenth);
   height:calc( v-bind(heightSin) * -1 );
   background-color: v-bind(bgcolor);
   filter: brightness(1.7);
   z-index: -1;
-}
-#block{
-  transition: all .4s;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height:100%;
-  overflow:hidden;
-}
-
-#block > img {
-  transform: translateY(-60px);
-  filter:drop-shadow(0px 60px v-bind(color));
-  height: 75%; 
-  object-fit: cover;
-  vertical-align: middle;
 }
 
 </style>
