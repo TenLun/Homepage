@@ -17,7 +17,7 @@ const BlockContainer = ref();
 const [width, lenth, heightCos, heightSin] = calculateDimensions(HWL).map(Value => ref(Value));
 
 const bgcolor = ref(props.BgColor);
-const angleZ = -60; //rotateZ
+const angleZ = -30; //rotateZ
 const angleX = 30; //rotateX
 
 function mouseOverHandler():void{
@@ -49,18 +49,20 @@ defineExpose( { bgcolor, width, lenth, heightCos, heightSin } )
 </template>
 
 <style scoped>
+/*top*/
 #blockContainer{
   height:v-bind(width);
   width:v-bind(lenth);
   
-  transform: translate(v-bind(heightCos) , v-bind(heightSin));
-  
+  transform: translate(v-bind(heightCos), calc(v-bind(heightSin)*-1) );
+
   background-color: v-bind(bgcolor);
   flex-shrink: 0;
   transition: all .4s;
   overflow: visible;
 }
 
+/*left*/
 #blockContainer::before{
   content:'';
 
@@ -71,12 +73,14 @@ defineExpose( { bgcolor, width, lenth, heightCos, heightSin } )
   height:v-bind(width);
 
   transform-origin: right;
-  transform: skewY( calc( v-bind(angleZ) * 1deg ) );
+  transform: skewY( calc(90deg - v-bind(angleZ) * 1deg ) );
   
   transition: all .4s;
   background-color: v-bind(bgcolor);
   filter: brightness(0.7);
 }
+
+/*front*/
 #blockContainer::after{
   content:'';
 
@@ -85,10 +89,10 @@ defineExpose( { bgcolor, width, lenth, heightCos, heightSin } )
   top: v-bind(width);
   
   width: v-bind(lenth);
-  height:calc( v-bind(heightSin) * -1 );
+  height:v-bind(heightSin);
 
   transform-origin: top;
-  transform: skewX( calc( 90deg - v-bind(angleZ) * 1deg ) );
+  transform: skewX( calc( v-bind(angleZ) * 1deg ) );
 
   transition: all .4s;
   background-color: v-bind(bgcolor);

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { PropType } from 'vue';
-import { nextTick, ref } from 'vue';
+import { ref, type PropType } from 'vue';
 import { calculateDimensions } from '../utils/Calculate';
 import Block from './Block.vue';
 
@@ -18,14 +17,13 @@ const HoverHWL = props.HoverHWL || [props.HWL[0]*10,props.HWL[1],props.HWL[2]];
 
 const Content = ref()
 const color = ref(props.Color);
-const bgColor = ref('rgb(39,39,39)')
 
 function mouseOverHandler(){
-  Content.value.bgcolor = color.value;
+  [Content.value.bgcolor, color.value] = [color.value, Content.value.bgcolor];
   [Content.value.width, Content.value.lenth, Content.value.heightCos, Content.value.heightSin] = calculateDimensions(HoverHWL);
 }
 function mouseOutHandler(){
-  Content.value.bgcolor = bgColor.value;
+  [Content.value.bgcolor, color.value] = [color.value, Content.value.bgcolor];
   [Content.value.width, Content.value.lenth, Content.value.heightCos, Content.value.heightSin] = calculateDimensions(HWL);
 }
 
@@ -41,19 +39,25 @@ function mouseOutHandler(){
 <style scoped>
 
 #content {
+  transition: all .4s;
   height: 100%;
   width: 100%;
-  transform: translateY(-60px);
-  filter:drop-shadow(0px 60px v-bind(color));
-  height: 75%; 
+  overflow:hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
   object-fit: cover;
   vertical-align: middle;
-  overflow:hidden;
 }
 
 #content > img {
-  height: 100%;
-  width: 100%;
+  transform: translateY(-60px);
+  filter:drop-shadow(0px 60px v-bind(color));
+  width: 75%; 
+  height: 75%; 
+  object-fit: cover;
+  vertical-align: middle;
 }
 
 </style>

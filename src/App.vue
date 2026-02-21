@@ -9,10 +9,10 @@ import Contact from './components/Contact.vue'
 import Title from './components/Title.vue';
 
 const UNIT = 50;
-
 const DOCHEIGHT = 50; //文档流多少个单位长
-
 const AppContainer = ref()
+const angleZ = -30; //rotateZ
+const angleX = 30; //rotateX
 
 var animateArray = [
   [3,1,-5,8,5,8],
@@ -41,7 +41,7 @@ var animateArray = [
 var entranceAnimation = () => {
   animate(AppContainer.value,{
     delay:"20",
-    transform: 'rotateX(30deg) rotateZ(-30deg) translateY(-135px) ' + ('translateX(-20px)'),
+    transform: `rotateX(${angleX}deg) rotateZ(${angleZ}deg) translateY(-135px)` + ('translateX(-20px)'),
     duration: 1000,
   })
   entranceAnimation = null;
@@ -54,7 +54,7 @@ nextTick(() => {
 
 function ScrollPage( scrollY: number ): void {
   var content = AppContainer.value;
-  content.style.transform = `rotateX(30deg) rotateZ(-30deg) translateY(-${scrollY+135}px)` + (' translateX(-20px)') ;
+  content.style.transform = `rotateX(${angleX}deg) rotateZ(${angleZ}deg) translateY(-${scrollY+135}px)` + (' translateX(-20px)') ;
 }
 var ticking = false;
 document.addEventListener('scroll', function() {

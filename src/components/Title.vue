@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import { nextTick, ref, type PropType } from 'vue';
+import { cos, sin } from '../utils/TriFunction';
+
 const props = defineProps({
   Position: { type: Object as PropType<[number,number] | undefined>, default: undefined },    //[x,y]
-})
+});
 
-const Title = ref()
+const Shadow = ref('');
+const angleZ = -30; //rotateZ
+const angleX = 30; //rotateX
 
 const animateShadow = () => {
-    for (var i = 0; i<-9 ; i--){
-        Title.value.style.textShadow += `${i}px ${i}px 0px #CCC,`
+    for (var i = 0; i < 9 ; i++){
+      Shadow.value += `${ i*cos(angleX) }px ${i*sin(angleZ)}px 0px rgb(20,20,20),`
     }
-}
-
-nextTick(animateShadow)
-
+    Shadow.value += `-9px -9px 0px #CCC`
+};
+nextTick(animateShadow);
 </script>
 
 <template>
@@ -22,6 +25,8 @@ nextTick(animateShadow)
 
 <style scoped>
 h1 {
-  transition: text-shadow 9s ease-in-out;
+  text-shadow: v-bind(Shadow);
+  text-align: left;
+  /* transition: text-shadow 9s ease-in-out; */
 }
 </style>
