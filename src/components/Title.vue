@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import { nextTick, ref, type PropType } from 'vue';
+import { nextTick, ref } from 'vue';
 import { cos, sin } from '../utils/TriFunction';
-
-const props = defineProps({
-  Position: { type: Object as PropType<[number,number] | undefined>, default: undefined },    //[x,y]
-});
 
 const Shadow = ref('');
 const angleZ = -30; //rotateZ
