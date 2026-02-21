@@ -1,17 +1,33 @@
 <script setup lang="ts">
-import type { PropType } from 'vue';
+import { ref, type PropType } from 'vue';
 import Block from './Block.vue';
+import { calculateDimensions } from '../utils/Calculate';
+
 const props = defineProps({
   unit: { type: Number, required: true },
   Position: { type: Object as PropType<[number,number] | undefined>, default:undefined},    //[x,y]
+  HWL: { type: Object as PropType<[number,number,number]>, default:[0.1,1,1]},  //[height,width,lenth]
+  HoverHWL: { type: Object as PropType<[number,number,number]>, default:[0.1,6,1]},  //[height,width,lenth]
   Href:String,
   Src:String
-})
+});
+
+const Content = ref();
+const HWL = props.HWL
+const HoverHWL = props.HoverHWL
+
+function mouseOverHandler(){
+  [Content.value.width, Content.value.lenth, Content.value.heightCos, Content.value.heightSin] = calculateDimensions(HoverHWL);
+}
+function mouseOutHandler(){
+  [Content.value.width, Content.value.lenth, Content.value.heightCos, Content.value.heightSin] = calculateDimensions(HWL);
+}
+
 </script>
 
 <template>
     <a :href="`${props.Href}`">
-    <Block :Position="props.Position" :HWL="[0.1,1,1]" :HoverHWL="[0.1,6,1]" :unit="props.unit" :Color="'rgb(39,39,39)'">
+    <Block ref="Content" :Position="props.Position" :HWL="HWL" :unit="props.unit" @mouseout="mouseOutHandler" @mouseover="mouseOverHandler">
       <div id="block-container">
         <div id="image-container" :style="`width:${props.unit}px; height:${props.unit}px;`">
             <img style="object-fit: cover; height: 75%;" loading="lazy" :src="`${props.Src}`" :alt="`${props.Src}`" />

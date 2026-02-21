@@ -1,21 +1,40 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
+import { calculateDimensions } from '../utils/Calculate';
 import Block from './Block.vue';
 
 const props = defineProps({
   unit: { type: Number, required: true },
   Position: { type: Object as PropType<[number,number] | undefined>, default:undefined},    //[x,y]
-  Color: { type:String, default:'rgb(39,39,39)'},
+  HWL: { type: Object as PropType<[number,number,number]>, default:[0.1,1,1]},  //[height,width,lenth]
+  HoverHWL: { type: Object as PropType<[number,number,number]>}, //[height,width,lenth]
+  Color: { type: String, default:'rgb(39,39,39)'},
+  ImgSrc: {type: String}
 })
 
-const color= ref(props.Color)
+const HWL = props.HWL
+const HoverHWL = props.HoverHWL || [props.HWL[0]*10,props.HWL[1],props.HWL[2]];
+
+const Content = ref()
+const color = ref(props.Color);
+const bgColor = ref('rgb(39,39,39)')
+
+function mouseOverHandler(){
+  Content.value.bgcolor = color.value;
+  [Content.value.width, Content.value.lenth, Content.value.heightCos, Content.value.heightSin] = calculateDimensions(HoverHWL);
+}
+function mouseOutHandler(){
+  Content.value.bgcolor = bgColor.value;
+  [Content.value.width, Content.value.lenth, Content.value.heightCos, Content.value.heightSin] = calculateDimensions(HWL);
+}
+
 
 </script>
 
 <template>
-  <Block :Position="props.Position" :HWL="[0.1,1,1]" :HoverHWL="[1,1,1]" :unit="props.unit" :Color="props.Color">
-    <div id="content"><slot></slot></div>
+  <Block @mouseover="mouseOverHandler" @mouseout="mouseOutHandler" ref="Content" :Position="props.Position" :HWL="HWL" :unit="props.unit">
+    <div id="content"><img :src="`${props.ImgSrc}`" :alt="`${props.ImgSrc}`"></div>
   </Block>
 </template>
 

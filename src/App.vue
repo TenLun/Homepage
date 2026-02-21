@@ -6,7 +6,7 @@ import Languages from './components/Languages.vue'
 import ScrollHolder from './components/ScrollHolder.vue'
 import Project from './components/Project.vue'
 import Contact from './components/Contact.vue'
-import Block from './components/Block.vue';
+import Title from './components/Title.vue';
 
 const UNIT = 50;
 
@@ -54,7 +54,7 @@ nextTick(() => {
 
 function ScrollPage( scrollY: number ): void {
   var content = AppContainer.value;
-  content.style.transform = `translateY(-${scrollY}px)` + 'translateX(0px)' ;//`rotateX(30deg) rotateZ(-30deg) translateY(-${scrollY+135}px)` + (' translateX(-20px)') ;
+  content.style.transform = `rotateX(30deg) rotateZ(-30deg) translateY(-${scrollY+135}px)` + (' translateX(-20px)') ;
 }
 var ticking = false;
 document.addEventListener('scroll', function() {
@@ -77,16 +77,16 @@ document.addEventListener('scroll', function() {
 
     <!--正文--->
     <div id="content">
-      <Block :Position="[5,21]" :unit="UNIT" :Color="'white'"><div style="justify-content: center;align-items: center;">TECH STACK</div></Block>
+      <Title :Position="[5,21]" :unit="UNIT" :Color="'white'">TECH STACK</Title>
       <div id="Languages-display">
-        <Languages :Color="'red'" :unit="UNIT" ><img src="./assets/icons/npm.svg" alt="npm"></Languages>
-        <Languages :Color="'green'" :unit="UNIT" ><img src="./assets/icons/vue.svg" alt="vue"></Languages>
-        <Languages :Color="'deepskyblue'" :unit="UNIT" ><img src="./assets/icons/python.svg" alt="python"></Languages>
-        <Languages :Color="'gold'" :unit="UNIT" ><img src="./assets/icons/js.svg" alt="js"></Languages>
-        <Languages :Color="'orange'" :unit="UNIT" ><img src="./assets/icons/html.svg" alt="html5"></Languages>
+        <Languages :Color="'red'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/npm.svg'"></Languages>
+        <Languages :Color="'green'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/vue.svg'"></Languages>
+        <Languages :Color="'deepskyblue'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/python.svg'"></Languages>
+        <Languages :Color="'gold'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/js.svg'"></Languages>
+        <Languages :Color="'orange'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/html.svg'" ></Languages>
       </div>
 
-      <Block :Position="[5,26]" :unit="UNIT" :Color="'white'"><div>MY PROJECTS</div></Block>
+      <Title :Position="[5,26]" :unit="UNIT" :Color="'white'">MY PROJECTS</Title>
       <div id="Project-display">
         <Project :unit="UNIT" :Href="'Tenlun/SVG-Generator'" />
         <Project :unit="UNIT" :Href="'Tenlun/Homepage'" />
