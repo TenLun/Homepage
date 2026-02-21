@@ -81,11 +81,11 @@ document.addEventListener('scroll', function() {
     <div id="content">
       <Title :unit="UNIT" :Color="'white'">TECH STACK</Title>
       <div id="Languages-display">
-        <Languages :HWL="[0.2,1,2]" :Color="'#CB3837'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/npm.svg'">NPM</Languages>
-        <Languages :HWL="[0.2,1,2]" :Color="'#40B17F'" :unit="UNIT" :ImgSrc="'./src/assets/icons/vue.svg'">Vue3</Languages>
-        <Languages :HWL="[0.2,1,3]" :Color="'#3766AB'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/python.svg'">Python</Languages>
-        <Languages :HWL="[0.2,1,4]" :Color="'#F7DF1E'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/js.svg'">JavaScript</Languages>
-        <Languages :HWL="[0.2,1,3]" :Color="'#E34F26'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/html.svg'" >HTML5</Languages>
+        <Languages :HWL="[0.2,1,2]" :Color="'#CB3837'" :unit="UNIT"  :ImgSrc="'./icons/npm.svg'">NPM</Languages>
+        <Languages :HWL="[0.2,1,2]" :Color="'#40B17F'" :unit="UNIT" :ImgSrc="'./icons/vue.svg'">Vue3</Languages>
+        <Languages :HWL="[0.2,1,3]" :Color="'#3766AB'" :unit="UNIT"  :ImgSrc="'./icons/python.svg'">Python</Languages>
+        <Languages :HWL="[0.2,1,4]" :Color="'#F7DF1E'" :unit="UNIT"  :ImgSrc="'./icons/js.svg'">JavaScript</Languages>
+        <Languages :HWL="[0.2,1,3]" :Color="'#E34F26'" :unit="UNIT"  :ImgSrc="'./icons/html.svg'" >HTML5</Languages>
       </div>
 
       <Title :unit="UNIT" :Color="'white'">MY PROJECTS</Title>
