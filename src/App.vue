@@ -7,9 +7,10 @@ import ScrollHolder from './components/ScrollHolder.vue'
 import Project from './components/Project.vue'
 import Contact from './components/Contact.vue'
 import Title from './components/Title.vue';
+import Typing from './components/Typing.vue';
 
 const UNIT = 50;
-const DOCHEIGHT = 50; //文档流多少个单位长
+const DOCHEIGHT = 60; //文档流多少个单位长
 const AppContainer = ref()
 const angleZ = -30; //rotateZ
 const angleX = 30; //rotateX
@@ -40,8 +41,8 @@ var animateArray = [
 
 var entranceAnimation = () => {
   animate(AppContainer.value,{
-    delay:"20",
-    transform: `rotateX(${angleX}deg) rotateZ(${angleZ}deg) translateY(-135px)` + ('translateX(-20px)'),
+    delay:"10",
+    transform: `rotateX(${angleX}deg) rotateZ(${angleZ}deg) translateY(-135px)`,
     duration: 1000,
   })
   entranceAnimation = null;
@@ -54,7 +55,7 @@ nextTick(() => {
 
 function ScrollPage( scrollY: number ): void {
   var content = AppContainer.value;
-  content.style.transform = `rotateX(${angleX}deg) rotateZ(${angleZ}deg) translateY(-${scrollY+135}px)` + (' translateX(-20px)') ;
+  content.style.transform = `rotateX(${angleX}deg) rotateZ(${angleZ}deg) translateY(-${scrollY+135}px)`;
 }
 var ticking = false;
 document.addEventListener('scroll', function() {
@@ -73,30 +74,34 @@ document.addEventListener('scroll', function() {
   
   <div id="wrapper" ref="AppContainer">
     <div id="background"></div>
+    <h1>Hi,I'm</h1>
     <div id="animationContainer"><Animation v-for="item in animateArray" :animateVar="item" :unit="UNIT"/></div>
-
+    <Typing/>
     <!--正文--->
     <div id="content">
-      <Title :Position="[5,21]" :unit="UNIT" :Color="'white'">TECH STACK</Title>
+      <Title :unit="UNIT" :Color="'white'">TECH STACK</Title>
       <div id="Languages-display">
-        <Languages :Color="'red'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/npm.svg'"></Languages>
-        <Languages :Color="'green'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/vue.svg'"></Languages>
-        <Languages :Color="'deepskyblue'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/python.svg'"></Languages>
-        <Languages :Color="'gold'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/js.svg'"></Languages>
-        <Languages :Color="'orange'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/html.svg'" ></Languages>
+        <Languages :HWL="[0.2,1,2]" :Color="'#CB3837'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/npm.svg'">NPM</Languages>
+        <Languages :HWL="[0.2,1,2]" :Color="'#40B17F'" :unit="UNIT" :ImgSrc="'./src/assets/icons/vue.svg'">Vue3</Languages>
+        <Languages :HWL="[0.2,1,3]" :Color="'#3766AB'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/python.svg'">Python</Languages>
+        <Languages :HWL="[0.2,1,4]" :Color="'#F7DF1E'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/js.svg'">JavaScript</Languages>
+        <Languages :HWL="[0.2,1,3]" :Color="'#E34F26'" :unit="UNIT"  :ImgSrc="'./src/assets/icons/html.svg'" >HTML5</Languages>
       </div>
 
-      <Title :Position="[5,26]" :unit="UNIT" :Color="'white'">MY PROJECTS</Title>
+      <Title :unit="UNIT" :Color="'white'">MY PROJECTS</Title>
       <div id="Project-display">
         <Project :unit="UNIT" :Href="'Tenlun/SVG-Generator'" />
         <Project :unit="UNIT" :Href="'Tenlun/Homepage'" />
         <Project :unit="UNIT" :Href="'Tenlun/Console'" />
       </div>
 
+      <Title :unit="UNIT" :Color="'white'">CONTACTS</Title>
       <div id="Contact-display">
-        <Contact :Position="[21,21]" :Src="'discord.svg'" :unit="UNIT">Discord (tenlun/otenluno)</Contact>
-        <Contact :Position="[20,21]" :Src="'twitter.svg'" :unit="UNIT">Twitter (Tenlun/@oTenluno)</Contact>
-        <Contact :Position="[19,21]" :Href="'https://github.com/Tenlun'" :Src="'github.svg'" :unit="UNIT">Github (Tenlun/TenLun)</Contact>
+        <Contact :Href="'mailto:tenlun@outlook.com'" :Src="'outlook.svg'" :unit="UNIT">Outlook (tenlun@outlook.com)</Contact>
+        <Contact :Href="'https://discordapp.com/users/827701073585373184'":Src="'discord.svg'" :unit="UNIT">Discord (tenlun/otenluno)</Contact>
+        <Contact :Href="'https://x.com/Tenlun'" :Src="'twitter.svg'" :unit="UNIT">Twitter (Tenlun/@oTenluno)</Contact>
+        <Contact :Href="'https://github.com/Tenlun'" :Src="'github.svg'" :unit="UNIT">Github (Tenlun/TenLun)</Contact>
+        <Contact :HoverHWL="[0.3,7,1]" :Href="'https://t.me/Tenlun'" :Src="'telegram.svg'" :unit="UNIT">Telegram (Tenlun Kaiki/@oTenLuno)</Contact>
       </div>
     </div>
   </div>
@@ -119,22 +124,29 @@ document.addEventListener('scroll', function() {
   height: 100vh;
 }
 
+#content{
+  position: absolute;
+  left:0px;
+  top: calc(v-bind(UNIT)*23px);
+}
+
 #background{
   position: absolute;
   top: -900px;
-  left: -200px;
+  left: -400px;
   width: 300vw;
   height: calc(v-bind(DOCHEIGHT*UNIT) * 1px + 900px);
   overflow: visible;
   background-image: url('./assets/background.svg');
 }
 
-#Languages-display,#Project-display{
-  margin: calc(v-bind(UNIT) * 4px);
-  left: 0px;
+#Languages-display,#Project-display,#Contact-display{
+  margin-top: calc(v-bind(UNIT)*1px);
+  margin-bottom: calc(v-bind(UNIT)*1px);
+  margin-left: calc(v-bind(UNIT)*1px);
+  margin-right: calc(v-bind(UNIT)*3px);
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
   gap: calc(v-bind(UNIT) * 1px);
 }
 </style>

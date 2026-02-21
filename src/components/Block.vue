@@ -18,7 +18,7 @@ const [width, lenth, heightCos, heightSin] = calculateDimensions(HWL).map(Value 
 
 const bgcolor = ref(props.BgColor);
 const angleZ = -30; //rotateZ
-const angleX = 30; //rotateX
+//const angleX = 30; //rotateX
 
 function mouseOverHandler():void{
   emit('mouseover')

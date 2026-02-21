@@ -6,8 +6,8 @@ import { calculateDimensions } from '../utils/Calculate';
 const props = defineProps({
   unit: { type: Number, required: true },
   Position: { type: Object as PropType<[number,number] | undefined>, default:undefined},    //[x,y]
-  HWL: { type: Object as PropType<[number,number,number]>, default:[0.1,1,1]},  //[height,width,lenth]
-  HoverHWL: { type: Object as PropType<[number,number,number]>, default:[0.1,6,1]},  //[height,width,lenth]
+  HWL: { type: Object as PropType<[number,number,number]>, default:[0.3,1,1]},  //[height,width,lenth]
+  HoverHWL: { type: Object as PropType<[number,number,number]>, default:[0.3,6,1]},  //[height,width,lenth]
   Href:String,
   Src:String
 });
@@ -26,11 +26,11 @@ function mouseOutHandler(){
 </script>
 
 <template>
-    <a :href="`${props.Href}`">
+    <a :href="`${props.Href}`" target="_blank">
     <Block ref="Content" :Position="props.Position" :HWL="HWL" :unit="props.unit" @mouseout="mouseOutHandler" @mouseover="mouseOverHandler">
       <div id="block-container">
         <div id="image-container" :style="`width:${props.unit}px; height:${props.unit}px;`">
-            <img style="object-fit: cover; height: 75%;" loading="lazy" :src="`${props.Src}`" :alt="`${props.Src}`" />
+            <img loading="lazy" :src="`${props.Src}`" :alt="`${props.Src}`" />
         </div>
         <div id="text"><slot></slot></div>
       </div>
@@ -49,6 +49,12 @@ function mouseOutHandler(){
   align-items: center;
   background-color: rgb(39,39,39);
   z-index: 1
+}
+
+#image-container > img {
+  object-fit: cover;
+  height: 75%;
+  width: 75%;
 }
 
 #block-container{

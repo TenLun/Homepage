@@ -9,12 +9,13 @@ const props = defineProps({
 const Shadow = ref('');
 const angleZ = -30; //rotateZ
 const angleX = 30; //rotateX
+const UNIT = 50; //rotateX
 
 const animateShadow = () => {
     for (var i = 0; i < 9 ; i++){
-      Shadow.value += `${ i*cos(angleX) }px ${i*sin(angleZ)}px 0px rgb(20,20,20),`
+      Shadow.value += `${ i*cos(angleX)*cos(90+angleZ)*-1}px ${i*cos(angleX)*sin(90+angleZ)}px 0px rgb(133,133,133),`
     }
-    Shadow.value += `-9px -9px 0px #CCC`
+    Shadow.value += `0px 0px 0px #000`
 };
 nextTick(animateShadow);
 </script>
@@ -25,6 +26,8 @@ nextTick(animateShadow);
 
 <style scoped>
 h1 {
+  height: calc(v-bind(UNIT)*1px);
+  margin: 0px !important;
   text-shadow: v-bind(Shadow);
   text-align: left;
   /* transition: text-shadow 9s ease-in-out; */
